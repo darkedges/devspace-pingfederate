@@ -4,14 +4,14 @@ metadata:
   name: {{ template "ping.fullname". }}-ui-lb
   namespace: {{ .Release.Namespace }}
   labels:
-    app: pingfederate
+    app: {{ template "ping.fullname". }}
     chart: {{ template "ping.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   type: ClusterIP
   selector:
-    app: pingfederate
+    app: {{ template "ping.fullname". }}
     ui: enabled
   ports:
     - name: tcp-http
@@ -25,14 +25,14 @@ metadata:
   name: {{ template "ping.fullname". }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: pingfederate
+    app: {{ template "ping.fullname". }}
     chart: {{ template "ping.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   clusterIP: None
   selector:
-    app: pingfederate
+    app: {{ template "ping.fullname". }}
   ports:
     - name: tcp-http
       port: 9999

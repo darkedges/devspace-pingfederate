@@ -1,0 +1,89 @@
+{{- if and (.Values.global.clustered_engine.enabled)  (.Values.global.clustered_engine.isStatefulSet) }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  {{ template "ping.fullname" . }}-engine
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}
+    component: clustered_engine
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "ping.fullname". }}
+  replicas: {{ .Values.global.clustered_engine.replicas }}
+  serviceName: {{ template "ping.fullname". }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "ping.fullname". }}
+        ui: disabled
+        engine: enabled
+        chart: {{ template "ping.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "ping.serviceAccountName" . }}
+      initContainers:
+        {{- if .Values.waitforservices.identityStore }}
+        - name: wait-for-first
+          image: opsfleet/depends-on
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          args:
+          - -service={{ template "ping.frdsServiceName" (list .Release.Name .Values.services.identityStore) }}
+          - -service={{ template "dbServiceName" . }}
+        {{- end }}
+        # - name: init
+        #   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        #   imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        #   command:
+        #     - ./docker-entrypoint.sh
+        #     - init
+        #   volumeMounts:
+        #     - mountPath: /var/pingfederate/instance
+        #       name: pingfederate-data-volume
+      containers:
+      - name: pingfederate
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        env:
+        - name: PF_OPERATIONAL_MODE
+          value: CLUSTERED_ENGINE
+        {{- if .Values.pingfederate.env }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "ping.fullname". }}-config
+          - secretRef:
+              name: {{ template "ping.fullname". }}-secrets
+        {{- end }}
+        ports:
+        - containerPort: 9031
+        volumeMounts:
+          - mountPath: /var/pingfederate/instance
+            name: pingfederate-data-volume
+        readinessProbe:
+          tcpSocket:
+            port: 9031
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 9031
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+  volumeClaimTemplates:
+  - metadata:
+      name: pingfederate-data-volume
+    spec:
+      {{- if .Values.volumeClaimTemplates.data.storageClassName }}
+      storageClassName: {{ .Values.volumeClaimTemplates.data.storageClassName }}
+      {{- end }}
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.data.storageSize }}
+{{- end }}

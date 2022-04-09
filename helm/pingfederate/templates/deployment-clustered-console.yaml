@@ -5,7 +5,7 @@ metadata:
   name: {{ template "ping.fullname" . }}-console
   namespace: {{ .Release.Namespace }}
   labels:
-    app: pingfederate
+    app: {{ template "ping.fullname". }}
     component: clustered_console
     chart: {{ template "ping.chart" . }}
     release: {{ .Release.Name }}
@@ -13,12 +13,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: pingfederate
+      app: {{ template "ping.fullname". }}
   replicas: {{ .Values.global.clustered_console.replicas }}
   template:
     metadata:
       labels:
-        app: pingfederate
+        app: {{ template "ping.fullname". }}
         ui: enabled
         engine: disabled
         chart: {{ template "ping.chart" . }}
