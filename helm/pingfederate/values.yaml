@@ -1,0 +1,52 @@
+replicaCount: 1
+
+volumeClaimTemplates:
+  data:
+    storageClassName:
+    storageSize: 100Mi
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+image:
+  repository:  darkedges/pingfederate
+  tag: 11.0.2
+  imagePullPolicy: IfNotPresent
+
+pingfederate:
+  env:
+
+secrets:
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+waitforservices:
+  ldapService:
+  dbService:
+
+ingress:
+  enabled: false
+  fqdn: pingfederate.darkedges.com
+
+global:
+  standalone:
+    enabled: false
+    replicas: 0
+    isStatefulSet: false
+  clustered_console:
+    enabled: false
+    replicas: 0
+    isStatefulSet: false
+  clustered_engine:
+    enabled: false
+    replicas: 0
+    isStatefulSet: false

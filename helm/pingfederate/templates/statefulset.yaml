@@ -1,0 +1,78 @@
+{{- if .Values.isStatefulSet }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  {{ template "ping.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "ping.fullname". }}
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ template "ping.fullname". }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "ping.fullname". }}
+        chart: {{ template "ping.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "ping.serviceAccountName" . }}
+      initContainers:
+        - name: wait-for-first
+          image: opsfleet/depends-on
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          args:
+          - -service=frds-ds-development
+        - name: init-pingfederate
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          command:
+            - ./docker-entrypoint.sh
+            - init_k8s_identitymanager
+          volumeMounts:
+            - mountPath: /opt/pingfederate/instance/data
+              name: pingfederate-data-volume
+      containers:
+      - name: pingfederate
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        {{- if .Values.pingfederate.env }}
+        envFrom:
+          - configMapRef:
+              name: pingfederate-config
+        {{- end }}
+        ports:
+        - containerPort: 9999
+        volumeMounts:
+          - mountPath: /opt/pingfederate/instance/data
+            name: pingfederate-data-volume
+        readinessProbe:
+          tcpSocket:
+            port: 9999
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 9999
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+  volumeClaimTemplates:
+  - metadata:
+      name: pingfederate-data-volume
+    spec:
+      {{- if .Values.volumeClaimTemplates.data.storageClassName }}
+      storageClassName: {{ .Values.volumeClaimTemplates.data.storageClassName }}
+      {{- end }}
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.data.storageSize }}
+{{- end }}

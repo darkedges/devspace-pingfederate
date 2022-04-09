@@ -1,0 +1,74 @@
+{{- if and (.Values.global.standalone.enabled)  (not .Values.global.standalone.isStatefulSet) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ping.fullname" . }}-standalone
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: pingfederate
+    component: standalone
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: pingfederate
+  replicas: {{ .Values.global.standalone.replicas }}
+  template:
+    metadata:
+      labels:
+        app: pingfederate
+        ui: enabled
+        engine: enabled
+        chart: {{ template "ping.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "ping.serviceAccountName" . }}
+      initContainers:
+        {{- if .Values.waitforservices.identityStore }}
+        - name: wait-for-first
+          image: opsfleet/depends-on
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          args:
+          - -service={{ template "ping.frdsServiceName" (list .Release.Name .Values.services.identityStore) }}
+          - -service={{ template "dbServiceName" . }}
+        {{- end }}
+        # - name: init
+        #   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        #   imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        #   command:
+        #     - ./docker-entrypoint.sh
+        #     - init
+        #   env:
+        #   - name: INIT_INSTANCE_TYPE
+        #     value: standalone
+      containers:
+      - name: pingfederate
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        env:
+        - name: PF_OPERATIONAL_MODE
+          value: STANDALONE
+        {{- if .Values.pingfederate.env }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "ping.fullname". }}-config
+          - secretRef:
+              name: {{ template "ping.fullname". }}-secrets
+        {{- end }}
+        ports:
+        - containerPort: 9999
+        - containerPort: 9031
+        readinessProbe:
+          tcpSocket:
+            port: 9999
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 9999
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+{{- end }}
