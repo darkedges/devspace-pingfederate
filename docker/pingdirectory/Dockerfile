@@ -23,7 +23,6 @@ COPY --from=0 --chown=ping:ping /var/tmp/PingDirectory /opt/ping/directory
 ENV PATH=$PATH:/opt/ping/directory/scripts:/opt/ping/directory/bin
 
 COPY --chown=ping:ping rootscripts/ /opt/ping/directory/
-COPY --chown=ping:ping license/ /opt/ping/directory/
 
 RUN chown -R ping:ping /var/ping/directory && \
     chmod 0700 /opt/ping/directory/*.sh && \

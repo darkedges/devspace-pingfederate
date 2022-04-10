@@ -2,9 +2,11 @@
 
 echo "Setup"
 
+#Create Password Files
 echo "Passw0rd" > /tmp/rootUserPasswordFile
 echo "Passw0rd" > /tmp/encryptDataWithPassphraseFromFile
 
+# Setup
 ./setup \
     --acceptLicense \
     --allowWeakRootUserPassword \
@@ -31,4 +33,10 @@ echo "Passw0rd" > /tmp/encryptDataWithPassphraseFromFile
     --rootUserPasswordFile /tmp/rootUserPasswordFile \
     --skipHostnameCheck
 
+# Remove all password files
 rm -rf /tmp/{rootUserPasswordFile,encryptDataWithPassphraseFromFile}
+
+# This moves everything over to the mount
+mkdir -p /var/ping/directory/data/{db,config} 
+mv /opt/ping/directory/db/* /var/ping/directory/data/db/ 
+mv /opt/ping/directory/config/* /var/ping/directory/data/config/ 

@@ -1,0 +1,16 @@
+{{- if .Values.pingdirectory.directory.env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "ping.fullname". }}-directory-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}-directory
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  {{- with .Values.pingdirectory.directory.env }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,48 @@
+replicaCount: 1
+
+volumeClaimTemplates:
+  data:
+    storageClassName:
+    storageSize: 100Mi
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+console:
+  image:
+    repository:  darkedges/pingdirectoryconsole
+    tag: 9.0.0.1
+    imagePullPolicy: IfNotPresent
+
+directory:
+  image:
+    repository:  darkedges/pingdirectory
+    tag: 9.0.0.1
+    imagePullPolicy: IfNotPresent
+
+ingress:
+  enabled: false
+  fqdn: pingdirectory.darkedges.com
+
+pingdirectory:
+  console:
+    env:
+  directory:
+    env:
+
+secrets:
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name:
+
+global:
+  directory:
+    replicas: 0

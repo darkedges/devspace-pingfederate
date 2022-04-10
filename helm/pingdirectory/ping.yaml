@@ -1,0 +1,15 @@
+global:
+  directory:
+    replicas: 1
+  console:
+    enabled: true
+    replicas: 1
+
+pingdirectory:
+  directory:
+    env:
+      INIT_INSTANCE_PROFILE: directory
+
+ingress:
+  enabled: true 
+  fqdn: pingdirectory.internal.darkedges.com

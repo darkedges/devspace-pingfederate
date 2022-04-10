@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  {{ template "ping.fullname" . }}-directory
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}
+    component: directory
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "ping.fullname". }}-directory
+  replicas: {{ .Values.global.directory.replicas }}
+  serviceName: {{ template "ping.fullname". }}-directory
+  template:
+    metadata:
+      labels:
+        app: {{ template "ping.fullname". }}-directory
+        chart: {{ template "ping.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "ping.serviceAccountName" . }}
+      initContainers:
+        - name: init
+          image: {{ .Values.directory.image.repository }}:{{ .Values.directory.image.tag }}
+          imagePullPolicy: {{ .Values.directory.image.imagePullPolicy }}
+          {{- if .Values.pingdirectory.directory.env }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "ping.fullname". }}-directory-config
+            - secretRef:
+                name: {{ template "ping.fullname". }}-directory-secrets
+          {{- end }}
+          command:
+            - ./docker-entrypoint.sh
+            - init
+          volumeMounts:
+            - mountPath: /var/ping/directory/data
+              name: pingdirectory-data-volume
+      containers:
+      - name: pingdirectory
+        image: {{ .Values.directory.image.repository }}:{{ .Values.directory.image.tag }}
+        imagePullPolicy: {{ .Values.directory.image.imagePullPolicy }}
+        {{- if .Values.pingdirectory.directory.env }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "ping.fullname". }}-directory-config
+          - secretRef:
+              name: {{ template "ping.fullname". }}-directory-secrets
+        {{- end }}
+        ports:
+        - containerPort: 443
+        - containerPort: 389
+        - containerPort: 636
+        volumeMounts:
+          - mountPath: /var/ping/directory/data
+            name: pingdirectory-data-volume
+        readinessProbe:
+          tcpSocket:
+            port: 443
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 443
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+  volumeClaimTemplates:
+  - metadata:
+      name: pingdirectory-data-volume
+    spec:
+      {{- if .Values.volumeClaimTemplates.data.storageClassName }}
+      storageClassName: {{ .Values.volumeClaimTemplates.data.storageClassName }}
+      {{- end }}
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.data.storageSize }}

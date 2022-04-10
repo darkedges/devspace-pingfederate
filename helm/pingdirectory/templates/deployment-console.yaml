@@ -1,0 +1,50 @@
+{{- if .Values.global.console.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ping.fullname" . }}-console
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}-console
+    component: console
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "ping.fullname". }}-console
+  replicas: {{ .Values.global.console.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "ping.fullname". }}-console
+        chart: {{ template "ping.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "ping.serviceAccountName" . }}
+      containers:
+      - name: pingdirectoryconsole
+        image: {{ .Values.console.image.repository }}:{{ .Values.console.image.tag }}
+        imagePullPolicy: {{ .Values.console.image.imagePullPolicy }}
+        {{- if .Values.pingdirectory.console.env }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "ping.fullname". }}-console-config
+          - secretRef:
+              name: {{ template "ping.fullname". }}-console-secrets
+        {{- end }}
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+{{- end }}
