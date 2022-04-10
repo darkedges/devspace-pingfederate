@@ -1,4 +1,4 @@
-# Devspace for Ping Fedrate
+# Devspace for Ping Federate
 
 This currently deploys
 
