@@ -1,0 +1,17 @@
+vault:
+  enabled: false
+  server:
+    dev:
+      enabled: true
+  injector:
+    enabled: false
+  ui:
+    enabled: true
+    serviceType: NodePort
+
+certmanager:
+  enabled: false
+  installCRDs: true
+
+ingress-nginx:
+  enabled: false

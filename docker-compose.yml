@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  jre:
+    image: darkedges/jre:11.0.14_9-jre-alpine
+    build: 
+      context: docker/jre
+      args:
+        NAMESPACE: pingfederate
+  tomcat:
+    extends: jre
+    image: darkedges/tomcat:9.0.62
+    build: 
+      context: docker/tomcat
+  genjks:
+    extends: jre
+    image: darkedges/genjks:1.0.0
+    build: 
+      context: docker/genjks
+  pingdirectory_base:
+    extends: jre
+    image: darkedges/pingdirectory_base:9.0.0.1
+    build: 
+      context: docker/pingdirectory
+  pingdirectoryconsole:
+    extends: tomcat
+    image: darkedges/pingdirectoryconsole:9.0.0.1
+    build: 
+      context: docker/pingdirectoryconsole
+  pingfederate_base:
+    extends: tomcat
+    image: darkedges/pingfederate_base:11.0.2
+    build: 
+      context: docker/pingfederate
+  pingdirectory:
+    extends: pingdirectory_base
+    image: darkedges/pingdirectory:9.0.0.1
+    build: 
+      context: config/pingdirectory
+  pingfederate:
+    extends: pingfederate_base
+    image: darkedges/pingfederate:11.0.2
+    build: 
+      context: config/pingfederate

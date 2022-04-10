@@ -1,0 +1,24 @@
+global:
+  clustered_console: 
+    enabled: true
+    replicas: 1
+    isStatefulSet: false
+  clustered_engine: 
+    enabled: true
+    replicas: 1
+    isStatefulSet: false
+
+ingress:
+  console:
+    enabled: true 
+    fqdn: pingfederate.internal.darkedges.com
+  auth:
+    enabled: true 
+    fqdn: pingauth.internal.darkedges.com
+pingfederate:
+  env:
+    PF_CLUSTER_DISCOVERY_PROTOCOL: DNS_PING
+    PF_CLUSTER_DNS_PING_DNS_QUERY: pingfederate-engine.pingfederate.svc.cluster.local
+
+waitforservices:
+  ldapService: pingdirectory-directory

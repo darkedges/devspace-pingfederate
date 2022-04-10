@@ -21,6 +21,8 @@ spec:
             value: {{ .Release.Name }}
           - name: TYPE
             value: "directory"
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
         volumeMounts:
           {{- range $.Values.certificates.values }}
           - name: secret-volume-{{ .name }}
