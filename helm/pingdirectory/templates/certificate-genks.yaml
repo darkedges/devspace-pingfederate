@@ -1,0 +1,21 @@
+{{- $root := . -}}
+{{- range $certificate := .Values.certificates.values }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $root.Release.Name }}-{{ $certificate.name }}
+  namespace: {{ $root.Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname" $root }}
+    chart: {{ template "ping.chart" $root }}
+    release: {{ $root.Release.Name }}
+    heritage: {{ $root.Release.Service }}
+spec:
+  secretName: {{ template "ping.genSecretName" (dict "root" $root "certificate" $certificate) }}
+  issuerRef:
+    name: vault-issuer
+  commonName: {{ template "ping.genCommonName" (dict "root" $root "certificate" $certificate) }}
+  dnsNames:
+  {{ template "ping.genDNSNames" (dict "root" $root "certificate" $certificate) }}
+{{- end }}    

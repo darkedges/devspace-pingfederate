@@ -1,0 +1,38 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "ping.fullname". }}-genjks
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "ping.fullname". }}
+    chart: {{ template "ping.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: genjks
+        image: {{ .Values.certificates.image.repository }}:{{ .Values.certificates.image.tag }}
+        imagePullPolicy: {{ .Values.certificates.image.imagePullPolicy }}
+        env:
+          - name: INSTANCE
+            value: {{ .Release.Name }}
+          - name: TYPE
+            value: "directory"
+        volumeMounts:
+          {{- range $.Values.certificates.values }}
+          - name: secret-volume-{{ .name }}
+            mountPath: /etc/secret-volume/{{ .name }}/
+          {{- end }}               
+      volumes:
+      {{- $root := . -}}
+      {{- range $.Values.certificates.values }}
+        - name: secret-volume-{{ .name }}
+          secret:
+            secretName: {{ $root.Release.Name }}-{{ .name }}-tls
+      {{- end }}   
+      restartPolicy: Never
+      serviceAccountName:  {{ template "ping.fullname". }}-genjks
+  backoffLimit: 4

@@ -6,7 +6,7 @@ COPY PingFederate-$PINGFEDERATE_VERSION.zip /var/tmp/pingfederate.zip
 RUN unzip /var/tmp/pingfederate.zip -d /var/tmp/
 
 # Runtime deployment
-FROM eclipse-temurin:11.0.14_9-jre-alpine
+FROM darkedges/jre:11.0.14_9-jre-alpine
 
 ARG PINGFEDERATE_VERSION=11.0.2
 

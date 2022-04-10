@@ -6,7 +6,7 @@ COPY PingDirectory-$PINGDIRECTORY_VERSION.zip /var/tmp/pingdirectory.zip
 RUN unzip /var/tmp/pingdirectory.zip -d /var/tmp/
 
 # Runtime deployment
-FROM eclipse-temurin:11.0.14_9-jre-alpine
+FROM darkedges/jre:11.0.14_9-jre-alpine
 
 WORKDIR /opt/ping/directory
 

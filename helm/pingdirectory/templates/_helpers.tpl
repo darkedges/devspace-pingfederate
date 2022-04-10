@@ -55,3 +55,38 @@ Create the name of the service to use
 {{- $name := default .Values.dbService .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+
+{{- define "ping.genSecretName" -}}
+{{.root.Release.Name }}-{{- .certificate.secretName | default (printf "%s" .certificate.name)  }}-tls
+{{- end -}}
+
+{{- define "ping.genCommonName" -}}
+{{- .certificate.commonName | default (printf "%s-%s-0.%s-%s.%s" .root.Release.Name .certificate.name .root.Release.Name .certificate.name .root.Release.Namespace)  }}
+{{- end -}}
+
+{{- define "ping.genDNSNames" -}}
+{{- if .certificate.dnsNames -}}
+{{ .certificate.dnsNames | toYaml | indent 2}}
+{{- else -}}
+{{- $count := (.root.Values.global.directory.replicas | int) -}}
+{{- $root := .root -}}
+{{- $certificate := .certificate }}
+{{- $r:=list}}
+{{- range $index0 := until $count -}}
+ {{- $r = append $r (printf "%s-%s-%d\n" $root.Release.Name $certificate.name $index0) -}}
+{{- end }}
+{{- range $index0 := until $count -}}
+ {{- $r = append $r (printf "%s-%s-%d.%s-%s\n" $root.Release.Name $certificate.name $index0 $root.Release.Name $certificate.name) -}}
+{{- end }}
+{{- range $index0 := until $count -}}
+ {{- $r = append $r (printf "%s-%s-%d.%s-%s.%s\n" $root.Release.Name $certificate.name $index0 $root.Release.Name $certificate.name $root.Release.Namespace) -}}
+{{- end }}
+{{- range $index0 := until $count -}}
+ {{- $r = append $r (printf "%s-%s-%d.%s-%s.%s.%s\n" $root.Release.Name $certificate.name $index0 $root.Release.Name $certificate.name $root.Release.Namespace $root.Values.certificates.internal.cluster ) -}}
+{{- end }}
+{{- range $r -}}
+{{ printf "- %s" . | indent 2}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

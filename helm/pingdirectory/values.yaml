@@ -46,3 +46,12 @@ serviceAccount:
 global:
   directory:
     replicas: 0
+
+certificates:
+  image:
+    repository:  darkedges/genjks
+    tag: 1.0.0
+    imagePullPolicy: IfNotPresent
+  internal:
+    cluster: svc.cluster.local
+  values: {}

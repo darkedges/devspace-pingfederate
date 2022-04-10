@@ -126,8 +126,8 @@ RUN set -e \
 	fi
 
 # Runtime deployment
-FROM eclipse-temurin:11.0.14_9-jre-alpine
-RUN 	apk add bash libuuid
+FROM darkedges/jre:11.0.14_9-jre-alpine
+RUN apk add bash libuuid
 
 COPY --from=0 /usr/local/tomcat /usr/local/tomcat
 COPY --from=0 /usr/lib/libapr-1.so* /usr/lib/

@@ -34,8 +34,12 @@ waitforservices:
   dbService:
 
 ingress:
-  enabled: false
-  fqdn: pingfederate.darkedges.com
+  auth:
+    enabled: false
+    fqdn: 
+  console:
+    enabled: false
+    fqdn: 
 
 global:
   standalone:

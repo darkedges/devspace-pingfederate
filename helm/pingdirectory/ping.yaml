@@ -8,8 +8,20 @@ global:
 pingdirectory:
   directory:
     env:
-      INIT_INSTANCE_PROFILE: directory
+      INIT_INSTANCE_PROFILE: "directory"
+      DIRECTORY_BASE_DN: "dc=darkedges,dc=com"
+      DIRECTORY_SAMPLE_DATA: "10"
+      DIRECTORY_USE_JAVA_TRUSTSTORE: "/var/ping/directory/secrets/truststore.jks"
+      DIRECTORY_USE_JAVA_KEYSTORE: "/var/ping/directory/secrets/keystore.jks"
+      DIRECTORY_KEY_STORE_PASSWORD_FILE: "/var/ping/directory/secrets/keystore.pin"
+      DIRECTORY_TRUST_STORE_PASSWORD_FILE: "/var/ping/directory/secrets/truststore.pin"
 
 ingress:
   enabled: true 
   fqdn: pingdirectory.internal.darkedges.com
+
+certificates:
+  internal:
+    cluster: svc.cluster.local
+  values:
+    - name: directory

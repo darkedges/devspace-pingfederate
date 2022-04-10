@@ -1,8 +1,8 @@
-{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.console.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "ping.fullname". }}-ingress
+  name: {{ template "ping.fullname". }}-console-ingress
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "ping.fullname". }}
@@ -21,17 +21,17 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.ingress.fqdn }}
-    secretName: {{ template "ping.fullname". }}-tls
+    - {{ .Values.ingress.console.fqdn }}
+    secretName: {{ template "ping.fullname". }}-config-tls
   rules:
-  - host: {{ .Values.ingress.fqdn }}
+  - host: {{ .Values.ingress.console.fqdn }}
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ template "ping.fullname". }}-ui-lb
+            name: {{ template "ping.fullname". }}-console-lb
             port:
               number: 9999
   ingressClassName: nginx

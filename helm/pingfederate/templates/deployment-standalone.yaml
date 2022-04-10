@@ -19,7 +19,7 @@ spec:
     metadata:
       labels:
         app: {{ template "ping.fullname". }}
-        ui: enabled
+        console: enabled
         engine: enabled
         chart: {{ template "ping.chart" . }}
         release: {{ .Release.Name }}
@@ -27,13 +27,12 @@ spec:
     spec:
       serviceAccountName: {{ template "ping.serviceAccountName" . }}
       initContainers:
-        {{- if .Values.waitforservices.identityStore }}
+        {{- if .Values.waitforservices.ldapService }}
         - name: wait-for-first
           image: opsfleet/depends-on
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           args:
-          - -service={{ template "ping.frdsServiceName" (list .Release.Name .Values.services.identityStore) }}
-          - -service={{ template "dbServiceName" . }}
+          - -service={{ .Values.waitforservices.ldapService }}
         {{- end }}
         # - name: init
         #   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
