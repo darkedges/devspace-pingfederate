@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<EntityDescriptor entityID="" cacheDuration="PT1440M" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:sid="urn:sourceid.org:saml2:local-metadata-extension:v2">
+<EntityDescriptor cacheDuration="PT1440M" entityID="" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:sid="urn:sourceid.org:saml2:local-metadata-extension:v2">
     <!--This block contains Ping's proprietary endpoints-->
     <Extensions>
-        <sid:SourceIDExtension BaseURL="https://localhost:9031" Saml1xId="" WsFedID="" Saml1xSrcId="" DisableAutomaticConnectionValidation="false" DataStoreValidationInterval="300" RequestHeaderNameForCorrelationId="" CustomGlobalHttpHeaderName="" ClientIpHeaderIndex="last" ForwardedHostHeaderName="" ForwardedHostHeaderIndex="last" ProxyTerminatesHttpsConns="false" MetadataSigningKeyAlias="" MetadataSigningAlgorithm="" MetadataSigningKeyMD5Fingerprint="" ConfirmIdpSlo="false" ClientCertSSLHeaderName="" ClientCertChainSSLHeaderName="">
+        <sid:SourceIDExtension BaseURL="https://pingauth.internal.darkedges.com" ClientCertChainSSLHeaderName="" ClientCertSSLHeaderName="" ClientIpHeaderIndex="last" ConfirmIdpSlo="false" CustomGlobalHttpHeaderName="" DataStoreValidationInterval="300" DisableAutomaticConnectionValidation="false" ForwardedHostHeaderIndex="last" ForwardedHostHeaderName="" MetadataSigningAlgorithm="" MetadataSigningKeyAlias="" MetadataSigningKeyMD5Fingerprint="" ProxyTerminatesHttpsConns="false" RequestHeaderNameForCorrelationId="" Saml1xId="" Saml1xSrcId="" WsFedID="">
             <sid:LocalPathsDescriptor ResumePathPrefix="/resume" Suffix=".ping">
                 <sid:IDPLocalPaths>
                     <!--This endpoint is used by an IdP application to ask
@@ -34,7 +34,7 @@
                     <sid:InitiateAttributeQuery>/sp/startAttributeQuery</sid:InitiateAttributeQuery>
                 </sid:SPLocalPaths>
             </sid:LocalPathsDescriptor>
-            <sid:ApplicationURLs></sid:ApplicationURLs>
+            <sid:ApplicationURLs/>
             <sid:IdpDiscovery CommonDomainServer="false" IdPCommonDomainClient="false" SPCommonDomainClient="false" WriteCookiePath="/writecookie.cdc" ReadCookiePath="/readcookie.cdc">
                 <sid:CommonDomainClient CommonDomainServiceBaseUrl=""/>
                 <sid:CommonDomainService CommonDomain="" CookieLifeDays="365"/>
