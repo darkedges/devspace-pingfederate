@@ -1,5 +1,38 @@
 # Devspace for Ping Fedrate
 
+This currently deploys
+
+- Ping Directory
+  - `instance`
+  - `console`
+- Ping Federate
+  - `console`
+  - `engine`
+- Hashicorp Vault
+- cert-manager
+- ingress nginx
+
+HashiCorp Vault is used to issue certificates for the web front ends as well as being deployed into a JKS for use by the directory.
+
+All configuration is stored within the [values](values) directory
+
+Requires
+
+- [kubernetes](https://kubernetes.io/)
+- [docker](https://www.docker.com/)
+- [Helm](https://helm.sh/)
+- [HashiCorp Terraform](https://www.terraform.io/)
+
+## Passwords
+
+| App                        | URL                                                 | Username               | Password   |
+| -------------------------- | --------------------------------------------------- | ---------------------- | ---------- |
+| Ping Directory -cconsole   | <https://pingdirectory.internal.darkedges.com>      |                        |            |
+| Ping Directory - directory | `pingdirectory-directory-0.pingdirectory-directory` | `cn=Directory Manager` | `Passw0rd` |
+| Ping Federate - console    | <https://pingfederate.internal.darkedges.com>       | `administrator`        | `Passw0rd` |
+| Ping Federate - engine     | <https://pingauth.internal.darkedges.com>           |                        |            |
+| HashiCorp Vault            | <https://vault.internal.darkedges.com>              |                        | `root`     |
+
 ## Build Images
 
 ```bash
