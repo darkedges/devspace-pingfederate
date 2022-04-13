@@ -1,2 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urn:OpenIdConnectProviderPolicy enabled="true" trackUserSessionsForLogout="false" xmlns:urn="urn:pingidentity.com:pf:openid:connect:idp:policy"/>
+<urn:OpenIdConnectProviderPolicy enabled="true" defaultPolicyGroupId="OpenIDConnectPolicyManagement" trackUserSessionsForLogout="false" xmlns:urn="urn:pingidentity.com:pf:openid:connect:idp:policy">
+    <urn:ProviderPolicyGroup policyId="OpenIDConnectPolicyManagement" idTokenLife="5" includeSriInIdToken="false" includeUserInfoInIdToken="false" includeSHashInIdToken="false" returnIdTokenOnRefreshGrant="false" reissueIdTokenHybridFlows="false" policyName="OpenIDConnectPolicyManagement" accessTokenManagerId="AccessTokenManagement">
+        <urn:UserInfoMapping>
+            <urn1:AttributeMap Name="sub" Type="LDAP" AttributeSourceId="uid" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>uid</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="zoneinfo" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.locality" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="birthdate" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="gender" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="preferred_username" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="locale" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.country" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="updated_at" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.postal_code" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.region" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="nickname" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="email" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="website" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="email_verified" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="profile" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="phone_number_verified" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="given_name" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="middle_name" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="picture" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="name" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="phone_number" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.formatted" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="family_name" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeMap Name="address.street_address" Type="No Mapping" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:ValueText>NO_MAPPING</urn1:ValueText>
+            </urn1:AttributeMap>
+            <urn1:AttributeSource Id="uid" Description="uid" Type="LDAP" DataSourceId="LDAP-7D7DC0C223B35BA4EB202056FDEA3E6E8EB1D773" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+                <urn1:Parameter Name="filter" Value="uid=${uid}"/>
+                <urn1:Parameter Name="search_base" Value=""/>
+                <urn1:Parameter Name="search_attributes" Value="Subject DN,uid"/>
+                <urn1:Parameter Name="search_scope" Value="SUBTREE_SCOPE"/>
+                <urn1:Parameter Name="memberof_nested_group" Value="false"/>
+            </urn1:AttributeSource>
+            <urn1:TokenAuthorizationIssuanceCriteria xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2"/>
+        </urn:UserInfoMapping>
+        <urn:scopeAttributesMap/>
+        <urn:attributeContractInclusionMap/>
+        <urn:ExtendedAttributesAdditionalProperties/>
+    </urn:ProviderPolicyGroup>
+</urn:OpenIdConnectProviderPolicy>
