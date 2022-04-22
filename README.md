@@ -106,3 +106,26 @@ helm upgrade --namespace=pingfederate --create-namespace -f values/coreservices.
 helm install --namespace=pingfederate --create-namespace -f values/pingdirectory.yaml pingdirectory helm/pingdirectory
 helm install --namespace=pingfederate --create-namespace -f values/pingfederate.yaml pingfederate helm/pingfederate
 ```
+
+## Login to PingData Administrative Console
+
+1. Open <https://pingdirectory.internal.darkedges.com/>
+
+1. When presented with login enter
+
+   | key      | value      |
+   | -------- | ---------- |
+   | USERNAME | `user.0`   |
+   | PASSWORD | `password` |
+
+   ![Login Details](images/2022-04-23-08-46-08.png)
+
+   click the `Sign On`s button.
+
+1. Keep the defaults and press the `Allow` Button
+
+   ![Allow](images/2022-04-23-08-47-41.png)
+
+1. You will be presented with the `PingData Administrative Console`
+
+   ![PingData Administrative Console](images/2022-04-23-08-50-09.png)
