@@ -72,12 +72,12 @@ spec:
             readOnly: true
         readinessProbe:
           tcpSocket:
-            port: 443
+            port: 636
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
         livenessProbe:
           tcpSocket:
-            port: 443
+            port: 636
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
       volumes:

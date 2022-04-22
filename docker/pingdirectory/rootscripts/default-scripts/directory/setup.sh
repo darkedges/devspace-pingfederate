@@ -27,8 +27,6 @@ if [[ ! -z ${DIRECTORY_KEY_STORE_PASSWORD_FILE} ]]; then
     EXTRA_OPTIONS="${EXTRA_OPTIONS} --keyStorePasswordFile ${DIRECTORY_KEY_STORE_PASSWORD_FILE}"
 fi
 
-ls -lrt /var/ping/directory/secrets
-
 HOSTNAME=$(hostname -f)
 
 # Setup
@@ -56,8 +54,19 @@ HOSTNAME=$(hostname -f)
     --rootUserPasswordFile /tmp/rootUserPasswordFile \
     ${EXTRA_OPTIONS}
 
+# The following enable the OAuth SASL Handler
+cat <<EOF > /tmp/offlineBatchFile
+create-external-server --server-name pingauth --type http --set base-url:${OAUTH_BASE_URL}
+create-id-token-validator --validator-name "OpenID Token Validator" --type openid-connect --set enabled:true --set "identity-mapper:All Admin Users" --set evaluation-order-index:1 --set issuer-url:${OAUTH_OIDC_ISSUER_URL} --set allowed-signing-algorithm:${OAUTH_ALLOWED_SIGNING_ALGORITHM} --set openid-connect-provider:pingauth --set jwks-endpoint-path:${OAUTH_JWKS_ENDPOINT_PATH}
+create-root-dn-user --user-name user.0
+create-sasl-mechanism-handler --handler-name OAUTHBEARER --type oauth-bearer --set enabled:true --set "id-token-validator:OpenID Token Validator" --set require-both-access-token-and-id-token:false
+set-web-application-extension-prop --extension-name Console --set sso-enabled:true --set oidc-client-id:${OAUTH_OIDC_CLIENT_ID} --set oidc-client-secret:${OAUTH_OIDC_CLIENT_SECRET} --set oidc-issuer-url:${OAUTH_OIDC_ISSUER_URL}
+EOF
+
+./bin/dsconfig --offline --no-prompt --batch-file /tmp/offlineBatchFile
+
 # Remove all password files
-rm -rf /tmp/{rootUserPasswordFile,encryptDataWithPassphraseFromFile}
+rm -rf /tmp/{rootUserPasswordFile,encryptDataWithPassphraseFromFile,offlineBatchFile}
 
 # This moves everything over to the mount
 mkdir -p /var/ping/directory/data/{db,config}

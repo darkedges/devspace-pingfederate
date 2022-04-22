@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urn:OAuthConfig globalPersistentGrantIdleTimeout="30" globalPersistentGrantIdleTimeoutTimeUnit="d" enableOAuth="false" xmlns:urn="urn:pingidentity.com:pf:oauth:conf">
+<urn:OAuthConfig enableOAuth="true" authzCodeLength="30" authzCodeTimeout="60" restrictPlainPKCE="false" includeIssuerInAuthzResponse="false" rollRefreshTokens="false" refreshTokenRollingGracePeriod="0" rollingInterval="0" refreshTokenLength="42" atmIdForOAuthGrantManagement="" scopeForOAuthGrantManagement="" globalPersistentGrantExpirationTime="-1" globalPersistentGrantExpirationTimeUnit="d" globalPersistentGrantIdleTimeout="30" globalPersistentGrantIdleTimeoutTimeUnit="d" tokenEndpointBaseUrl="" userAuthzUrl="" registeredAuthzPath="" pendingAuthzTimeout="600" bypassActivationCodeConfirmation="false" devicePollingInterval="5" authzConsentSetting="INTERNAL" parTimeout="60" parRefLength="24" parStatus="ENABLED" xmlns:urn="urn:pingidentity.com:pf:oauth:conf">
+    <urn:UserKeyToAccessTokenMapping contextId="authz_req|HTMLFIDPA" tokenManagerId="AccessTokenManagement">
+        <urn1:AttributeMap Name="uid" Type="LDAP" AttributeSourceId="uid" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+            <urn1:ValueText>uid</urn1:ValueText>
+        </urn1:AttributeMap>
+        <urn1:AttributeSource Id="uid" Description="uid" Type="LDAP" DataSourceId="LDAP-7D7DC0C223B35BA4EB202056FDEA3E6E8EB1D773" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+            <urn1:Parameter Name="filter" Value="uid=${adapter.username}"/>
+            <urn1:Parameter Name="search_base" Value=""/>
+            <urn1:Parameter Name="search_attributes" Value="Subject DN,uid"/>
+            <urn1:Parameter Name="search_scope" Value="SUBTREE_SCOPE"/>
+            <urn1:Parameter Name="memberof_nested_group" Value="false"/>
+        </urn1:AttributeSource>
+        <urn1:TokenAuthorizationIssuanceCriteria xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2"/>
+    </urn:UserKeyToAccessTokenMapping>
+    <urn:AdapterToUserKeyMapping sourcePluginId="HTMLFIDPA">
+        <urn1:AttributeMap Name="USER_NAME" Type="LDAP" AttributeSourceId="uid" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+            <urn1:ValueText>Subject DN</urn1:ValueText>
+        </urn1:AttributeMap>
+        <urn1:AttributeMap Name="USER_KEY" Type="LDAP" AttributeSourceId="uid" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+            <urn1:ValueText>Subject DN</urn1:ValueText>
+        </urn1:AttributeMap>
+        <urn1:AttributeSource Id="uid" Description="uid" Type="LDAP" DataSourceId="LDAP-7D7DC0C223B35BA4EB202056FDEA3E6E8EB1D773" xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2">
+            <urn1:Parameter Name="filter" Value="uid=${username}"/>
+            <urn1:Parameter Name="search_base" Value=""/>
+            <urn1:Parameter Name="search_attributes" Value="Subject DN"/>
+            <urn1:Parameter Name="search_scope" Value="SUBTREE_SCOPE"/>
+            <urn1:Parameter Name="memberof_nested_group" Value="false"/>
+        </urn1:AttributeSource>
+        <urn1:TokenAuthorizationIssuanceCriteria xmlns:urn1="urn:sourceid.org:saml2:metadata-extension:v2"/>
+    </urn:AdapterToUserKeyMapping>
     <urn:ReuseExistingPersistentGrantForGrant>implicit</urn:ReuseExistingPersistentGrantForGrant>
     <urn:AllowAutoAuthzForExistingPersistentGrant>implicit</urn:AllowAutoAuthzForExistingPersistentGrant>
 </urn:OAuthConfig>
