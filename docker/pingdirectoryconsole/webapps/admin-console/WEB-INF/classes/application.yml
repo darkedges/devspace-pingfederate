@@ -25,21 +25,21 @@ logging:
 log.console: true
 PingData.SSO.OIDC:
   enabled: true
-  issuer-uri: https://pingauth.internal.darkedges.com/
+  issuer-uri: https://pingauth.internal.darkedges.com
   client-id: pingdirectory-admin-console
   client-secret: pingdirectory-admin-console
 #   trust-store-file: /home/console/truststore
 #   trust-store-type: JKS
 #   trust-store-pin:
 #   trust-store-pin-environment-variable:
-  strict-hostname-verification: false
-  trust-all: true
+#   strict-hostname-verification: false
+#   trust-all: true
   username-attributes:
-    - uid
+    - cn
 # log.file: /home/console/console.log
 # login.hide-server: false
-# ldap:
-#   server: localhost:1636
+ldap:
+  server: pingdirectory-directory-0.pingdirectory-directory:636
 #   init-user: cn=directory manager
 #   init-password: password
 #   trust-store-file: /home/console/truststore
