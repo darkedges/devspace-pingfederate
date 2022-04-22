@@ -15,6 +15,12 @@ pingdirectory:
       DIRECTORY_USE_JAVA_KEYSTORE: "/var/ping/directory/secrets/keystore.jks"
       DIRECTORY_KEY_STORE_PASSWORD_FILE: "/var/ping/directory/secrets/keystore.pin"
       DIRECTORY_TRUST_STORE_PASSWORD_FILE: "/var/ping/directory/secrets/truststore.pin"
+      OAUTH_BASE_URL: "https://pingauth.internal.darkedges.com"
+      OAUTH_ALLOWED_SIGNING_ALGORITHM: "RS256"
+      OAUTH_JWKS_ENDPOINT_PATH: "/pf/JWKS"
+      OAUTH_OIDC_CLIENT_ID: pingdirectory-admin-console
+      OAUTH_OIDC_CLIENT_SECRET: pingdirectory-admin-console
+      OAUTH_OIDC_ISSUER_URL: "https://pingauth.internal.darkedges.com"
 
 ingress:
   enabled: true 
