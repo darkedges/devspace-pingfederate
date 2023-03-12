@@ -1,56 +1,47 @@
-replicaCount: 1
-
-volumeClaimTemplates:
-  data:
-    storageClassName:
-    storageSize: 100Mi
-
-readinessProbe:
-  initialDelaySeconds: 30
-  periodSeconds: 10
-livenessProbe:
-  initialDelaySeconds: 30
-  periodSeconds: 10
-
+---
+global:
+  clustered_console:
+    enabled: false
+    isStatefulSet: false
+    replicas: 0
+  clustered_engine:
+    enabled: false
+    isStatefulSet: false
+    replicas: 0
+  standalone:
+    enabled: false
+    isStatefulSet: false
+    replicas: 0
 image:
-  repository:  darkedges/pingfederate
-  tag: 11.0.2
   imagePullPolicy: IfNotPresent
-
-pingfederate:
-  env:
-
-secrets:
-
-rbac:
-  create: true
-
-serviceAccount:
-  create: true
-  name:
-
-waitforservices:
-  ldapService:
-  dbService:
-
+  repository: darkedges/pingfederate
+  tag: 11.2.3
 ingress:
   auth:
     enabled: false
-    fqdn: 
+    fqdn: null
   console:
     enabled: false
-    fqdn: 
-
-global:
-  standalone:
-    enabled: false
-    replicas: 0
-    isStatefulSet: false
-  clustered_console:
-    enabled: false
-    replicas: 0
-    isStatefulSet: false
-  clustered_engine:
-    enabled: false
-    replicas: 0
-    isStatefulSet: false
+    fqdn: null
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+pingfederate:
+  env: null
+rbac:
+  create: true
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+replicaCount: 1
+secrets: null
+serviceAccount:
+  create: true
+  name: null
+volumeClaimTemplates:
+  data:
+    storageClassName: null
+    storageSize: 100Mi
+waitforservices:
+  dbService: null
+  ldapService: null

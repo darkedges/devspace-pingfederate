@@ -1,12 +1,15 @@
+ARG JVM_IMAGE=darkedges/jvm
+ARG JVM_TAG=11-jre-alpine
+
 # Initial Configuration
-FROM alpine:3.15.0
-ARG PINGDIRECTORY_VERSION=9.0.0.1
+FROM alpine:3.17.2 as zip
+ARG PINGDIRECTORY_VERSION=9.2.0.0
 COPY PingDirectory-$PINGDIRECTORY_VERSION.zip /var/tmp/pingdirectory.zip
 
 RUN unzip /var/tmp/pingdirectory.zip -d /var/tmp/
 
 # Runtime deployment
-FROM darkedges/jre:11.0.14_9-jre-alpine
+FROM ${JVM_IMAGE}:${JVM_TAG}
 
 WORKDIR /opt/ping/directory
 
@@ -18,7 +21,7 @@ RUN apk add --no-cache tini bash && \
     chmod 0700 /var/ping/directory && \
     chmod g+s /var/ping/directory 
 
-COPY --from=0 --chown=ping:ping /var/tmp/PingDirectory /opt/ping/directory
+COPY --from=zip --chown=ping:ping /var/tmp/PingDirectory /opt/ping/directory
 
 ENV PATH=$PATH:/opt/ping/directory/scripts:/opt/ping/directory/bin
 

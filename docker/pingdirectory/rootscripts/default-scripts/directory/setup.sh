@@ -6,6 +6,8 @@ echo "Setup"
 echo "${DIRECTORY_ROOT_USER_PASSWORD:-Passw0rd}" > /tmp/rootUserPasswordFile
 echo "${DIRECTORY_ENCRYPTION_PASSWORD:-Passw0rd}" > /tmp/encryptDataWithPassphraseFromFile
 
+mkdir -p /var/ping/directory/data/security
+
 re='^[0-9]+$'
 EXTRA_OPTIONS=""
 if [[ $DIRECTORY_SAMPLE_DATA  =~ $re ]]; then
@@ -15,16 +17,24 @@ else
 fi
 
 if [[ ! -z ${DIRECTORY_USE_JAVA_TRUSTSTORE} ]]; then
-    EXTRA_OPTIONS="${EXTRA_OPTIONS} --useJavaTruststore ${DIRECTORY_USE_JAVA_TRUSTSTORE}"
+    f="$(basename -- ${DIRECTORY_USE_JAVA_TRUSTSTORE})"
+    cp ${DIRECTORY_USE_JAVA_TRUSTSTORE} /var/ping/directory/data/security/
+    EXTRA_OPTIONS="${EXTRA_OPTIONS} --useJavaTruststore /var/ping/directory/data/security/${f}"
 fi
 if [[ ! -z ${DIRECTORY_TRUST_STORE_PASSWORD_FILE} ]]; then
-    EXTRA_OPTIONS="${EXTRA_OPTIONS} --trustStorePasswordFile  ${DIRECTORY_TRUST_STORE_PASSWORD_FILE}"
+    f="$(basename -- ${DIRECTORY_TRUST_STORE_PASSWORD_FILE})"
+    cp ${DIRECTORY_TRUST_STORE_PASSWORD_FILE} /var/ping/directory/data/security/
+    EXTRA_OPTIONS="${EXTRA_OPTIONS} --trustStorePasswordFile  /var/ping/directory/data/security/${f}"
 fi
 if [[ ! -z ${DIRECTORY_USE_JAVA_KEYSTORE} ]]; then
-    EXTRA_OPTIONS="${EXTRA_OPTIONS} --useJavaKeystore ${DIRECTORY_USE_JAVA_KEYSTORE}"
+    f="$(basename -- ${DIRECTORY_USE_JAVA_KEYSTORE})"
+    cp ${DIRECTORY_USE_JAVA_KEYSTORE} /var/ping/directory/data/security/
+    EXTRA_OPTIONS="${EXTRA_OPTIONS} --useJavaKeystore /var/ping/directory/data/security/${f}"
 fi
 if [[ ! -z ${DIRECTORY_KEY_STORE_PASSWORD_FILE} ]]; then
-    EXTRA_OPTIONS="${EXTRA_OPTIONS} --keyStorePasswordFile ${DIRECTORY_KEY_STORE_PASSWORD_FILE}"
+    f="$(basename -- ${DIRECTORY_KEY_STORE_PASSWORD_FILE})"
+    cp ${DIRECTORY_KEY_STORE_PASSWORD_FILE} /var/ping/directory/data/security/
+    EXTRA_OPTIONS="${EXTRA_OPTIONS} --keyStorePasswordFile /var/ping/directory/data/security/${f}"
 fi
 
 HOSTNAME=$(hostname -f)
@@ -41,7 +51,7 @@ HOSTNAME=$(hostname -f)
     --instanceName ${DIRECTORY_INSTANCE_NAME:-Instance01} \
     --ldapPort ${DIRECTORY_HTTPS_PORT:-389} \
     --ldapsPort ${DIRECTORY_HTTPS_PORT:-636} \
-    --licenseKeyFile /opt/ping/directory/PingDirectory-9.0-Production.lic \
+    --licenseKeyFile /opt/ping/directory/PingDirectory.lic \
     --localHostName ${HOSTNAME} \
     --location ${DIRECTORY_LOCATION:-Melbourne} \
     --maxHeapSize ${DIRECTORY_MAX_HEAP_SIZEn:-786m} \

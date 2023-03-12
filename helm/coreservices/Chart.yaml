@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: "1.0"
-description: A Helm chart for DarkEdges ForgeRock Operations
-name: helm-darkedges-forgerock
+description: A Helm chart for DarkEdges Core Services
+name: helm-darkedges-coreservices
 version: 0.0.1
 
 dependencies:

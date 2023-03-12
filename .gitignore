@@ -1,4 +1,2 @@
-**/PingDirectory-9.0.0.1.zip
-docker/pingdirectory/license/PingDirectory-9.0-Production.lic
-docker/pingfederate/PingFederate-11.0.2.zip
-helm/pingfederate/ping.yaml
+**/*.zip
+**/*.lic
