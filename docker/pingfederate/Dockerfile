@@ -1,15 +1,16 @@
+ARG JVM_IMAGE=darkedges/jvm
+ARG JVM_TAG=11-jre-alpine
+
 # Initial Configuration
 FROM alpine:3.15.0
-ARG PINGFEDERATE_VERSION=11.0.2
-COPY PingFederate-$PINGFEDERATE_VERSION.zip /var/tmp/pingfederate.zip
+ARG PINGFEDERATE_VERSION=11.2.3
+COPY pingfederate-${PINGFEDERATE_VERSION}.zip /var/tmp/pingfederate.zip
 
 RUN unzip /var/tmp/pingfederate.zip -d /var/tmp/
 
 # Runtime deployment
-FROM darkedges/jre:11.0.14_9-jre-alpine
-
-ARG PINGFEDERATE_VERSION=11.0.2
-
+FROM ${JVM_IMAGE}:${JVM_TAG}
+ARG PINGFEDERATE_VERSION=11.2.3
 WORKDIR /opt/ping/federate
 
 RUN apk add --no-cache tini bash curl && \
@@ -20,7 +21,7 @@ RUN apk add --no-cache tini bash curl && \
     chmod 0700 /var/ping/federate && \
     chmod g+s /var/ping/federate 
 
-COPY --from=0 --chown=ping:ping /var/tmp/pingfederate-$PINGFEDERATE_VERSION/pingfederate/ /opt/ping/federate
+COPY --from=0 --chown=ping:ping /var/tmp/pingfederate-${PINGFEDERATE_VERSION}/pingfederate/ /opt/ping/federate
 
 ENV PATH=$PATH:/opt/ping/federate/scripts:/opt/ping/federate/bin
 

@@ -2,8 +2,8 @@
 
 # TrustStore generation
 TRUSTSTORE_PASSWORD=changeit
-keytool -import -trustcacerts -noprompt -keystore /tmp/truststore.jks -file /usr/local/share/ca-certificates/${NAMESPACE}-root.crt -storepass ${TRUSTSTORE_PASSWORD} -alias DarkEdgesRoot; 
-keytool -import -trustcacerts -noprompt -keystore /tmp/truststore.jks -file /usr/local/share/ca-certificates/${NAMESPACE}-intermediate.crt -storepass ${TRUSTSTORE_PASSWORD} -alias DarkEdgesIntermediate; 
+keytool -import -trustcacerts -noprompt -keystore /tmp/truststore.jks -file /usr/local/share/ca-certificates/CARoot.crt -storepass ${TRUSTSTORE_PASSWORD} -alias CARoot; 
+keytool -import -trustcacerts -noprompt -keystore /tmp/truststore.jks -file /usr/local/share/ca-certificates/CAIntermediate.crt -storepass ${TRUSTSTORE_PASSWORD} -alias CAIntermediate; 
 TRUSTSTORE_B64=`cat /tmp/truststore.jks|base64 -w0`
 TRUSTSTORE_PASSWORD_B64=`echo -n ${TRUSTSTORE_PASSWORD}|base64 -w0`
 

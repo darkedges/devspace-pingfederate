@@ -3,6 +3,12 @@
 ## Setup
 
 ```bash
-docker build . -t darkedges/pingfederate:11.0.2
-docker run --env-file .env -p 9999:9999 -p 9031:9031 -it docker.io/darkedges/pingfederate:11.0.2 start
+docker build . -t darkedges/pingfederate:11.2.3
+```
+
+## Refresh
+
+```console
+kubectl delete pods -n pingfederate --selector=app=pingfederate
+$pod= kubectl get pods --selector='app=pingfederate,engine=enabled' -o jsonpath='{.items[*].metadata.name}' -n pingfederate ; kubectl exec -it $pod -- bash
 ```

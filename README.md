@@ -82,7 +82,7 @@ subjects:
   namespace: $ISSUER_NAMESPACE
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: vault-issuer
   namespace: $ISSUER_NAMESPACE
@@ -129,3 +129,7 @@ helm install --namespace=pingfederate --create-namespace -f values/pingfederate.
 1. You will be presented with the `PingData Administrative Console`
 
    ![PingData Administrative Console](images/2022-04-23-08-50-09.png)
+
+## REquest License Key
+
+(https://www.pingidentity.com/en/account/request-license-key.html)[https://www.pingidentity.com/en/account/request-license-key.html]

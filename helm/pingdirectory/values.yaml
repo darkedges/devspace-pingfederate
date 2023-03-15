@@ -1,57 +1,47 @@
-replicaCount: 1
-
-volumeClaimTemplates:
-  data:
-    storageClassName:
-    storageSize: 100Mi
-
-readinessProbe:
-  initialDelaySeconds: 30
-  periodSeconds: 10
-livenessProbe:
-  initialDelaySeconds: 30
-  periodSeconds: 10
-
-console:
-  image:
-    repository:  darkedges/pingdirectoryconsole
-    tag: 9.0.0.1
-    imagePullPolicy: IfNotPresent
-
-directory:
-  image:
-    repository:  darkedges/pingdirectory
-    tag: 9.0.0.1
-    imagePullPolicy: IfNotPresent
-
-ingress:
-  enabled: false
-  fqdn: pingdirectory.darkedges.com
-
-pingdirectory:
-  console:
-    env:
-  directory:
-    env:
-
-secrets:
-
-rbac:
-  create: true
-
-serviceAccount:
-  create: true
-  name:
-
-global:
-  directory:
-    replicas: 0
-
+---
 certificates:
   image:
-    repository:  darkedges/genjks
-    tag: 1.0.0
     imagePullPolicy: IfNotPresent
+    repository: darkedges/genjks
+    tag: 1.0.0
   internal:
     cluster: svc.cluster.local
   values: {}
+console:
+  image:
+    imagePullPolicy: IfNotPresent
+    repository: darkedges/pingdirectoryconsole
+    tag: 9.2.0.0
+directory:
+  image:
+    imagePullPolicy: IfNotPresent
+    repository: darkedges/pingdirectory
+    tag: 9.2.0.0
+global:
+  directory:
+    replicas: 0
+ingress:
+  enabled: false
+  fqdn: pingdirectory.darkedges.com
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+pingdirectory:
+  console:
+    env: null
+  directory:
+    env: null
+rbac:
+  create: true
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+replicaCount: 1
+secrets: null
+serviceAccount:
+  create: true
+  name: null
+volumeClaimTemplates:
+  data:
+    storageClassName: null
+    storageSize: 100Mi
